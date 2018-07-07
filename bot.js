@@ -12,13 +12,25 @@ client.on('ready', () => {
 // response command =========================================
 client.on("message", (message) => {
     if (!message.content.startsWith(config.prefix) || message.author.bot) return;
-  
+  //=========================================================
+  // !ping
     if (message.content.startsWith(config.prefix + "ping")) {
       message.channel.send("pong!");
-    } else
+    } else 
+    // !foo
     if (message.content.startsWith(config.prefix + "foo")) {
       message.channel.send("bar!");
-    }
+    } else
+    // !prefix
+    if(message.content.startsWith(config.prefix + "prefix")) { 
+        // Gets the prefix from the command (eg. "!prefix +" it will take the "+" from it)
+        let newPrefix = message.content.split(" ").slice(1, 2)[0];
+        // change the configuration in memory
+        config.prefix = newPrefix;
+      
+        // Now we have to save the file.
+        fs.writeFile("./config.json", JSON.stringify(config), (err) => console.error);
+      }
   });
 // ini akses token ==========================================
 // masuk ke pengaturan heroku setting "BOT_TOKEN : token"
