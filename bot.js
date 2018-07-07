@@ -23,6 +23,7 @@ client.on("message", (message) => {
     } else
     // !prefix
     if(message.content.startsWith(config.prefix + "prefix")) { 
+        message.channel.send("error : contoh !prefix +");
         // Gets the prefix from the command (eg. "!prefix +" it will take the "+" from it)
         let newPrefix = message.content.split(" ").slice(1, 2)[0];
         // change the configuration in memory
