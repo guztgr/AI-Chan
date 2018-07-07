@@ -1,7 +1,8 @@
 // require ==================================================
-const Discord = require('discord.js');
+const Discord = require("discord.js");
+const config  = require("./config.json");
+const fs      = require("fs")
 const client  = new Discord.Client();
-const prefix  = "!"; // Set the prefix
 //===========================================================
 
 // console ==================================================
@@ -10,18 +11,28 @@ client.on('ready', () => {
 });
 // response command =========================================
 client.on("message", (message) => {
-    // Exit and stop if it's not there
-    if (!message.content.startsWith(prefix)) return;
-  
-    if (message.content.startsWith(prefix + "ping")) {
-      message.channel.send("pong!");
-    } else
-    if (message.content.startsWith(prefix + "foo")) {
-      message.channel.send("bar!");
-    }
-  });
+    // Exit and stop if it's not there ======================
+    client.on("message", (message) => {
+        if (!message.content.startsWith(config.prefix) || message.author.bot) return;
+      
+        if (message.content.startsWith(config.prefix + "ping")) {
+          message.channel.send("pong!");
+        } else
+        if (message.content.startsWith(config.prefix + "foo")) {
+          message.channel.send("bar!");
+        }
+      });
+      if(message.content.startsWith(config.prefix + "prefix")) {
+        // Gets the prefix from the command (eg. "!prefix +" it will take the "+" from it)
+        let newPrefix = message.content.split(" ").slice(1, 2)[0];
+        // change the configuration in memory
+        config.prefix = newPrefix;
+      
+        // Now we have to save the file.
+        fs.writeFile("./config.json", JSON.stringify(config), (err) => console.error);
+      }
 // ini akses token ==========================================
 // masuk ke pengaturan heroku setting "BOT_TOKEN : token"
-client.login(process.env.BOT_TOKEN);
+client.login(config.token);
 //============= end code =====================================
 
